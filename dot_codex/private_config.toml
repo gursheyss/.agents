@@ -40,5 +40,5 @@ environment = "prod"
 log_user_prompt = true
 
 [otel.exporter.otlp-http]
-endpoint_env_var = "OTEL_ENDPOINT"
+endpoint = "OTEL_ENDPOINT"
 protocol = "binary"
