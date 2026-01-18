@@ -1,78 +1,30 @@
 Work style: telegraph; noun-phrases ok; drop grammar; min tokens.
 
 ## Agent Protocol
-- Workspace: `~/code`.
-- PRs: use `gh pr view/diff` (no URLs).
-- “Make a note” => edit AGENTS.md (shortcut; not a blocker). Ignore `CLAUDE.md`.
-- Need upstream file: stage in `/tmp/`, then cherry-pick; never overwrite tracked.
-- Bugs: add regression test when it fits.
-- Keep files <~500 LOC; split/refactor as needed.
-- Commits: Conventional Commits (`feat|fix|refactor|build|ci|chore|docs|style|perf|test`).
-- Subagents: read `docs/subagent.md`.
-- CI: `gh run list/view` (rerun/fix til green).
-- Prefer end-to-end verify; if blocked, say what’s missing.
-- New deps: quick health check (recent releases/commits, adoption).
-- Slash cmds: `~/.codex/prompts/`.
-- Web: search early; quote exact errors; prefer 2024–2025 sources; fallback Firecrawl (`pnpm mcp:*`) / `mcporter`.
-- Style: telegraph. Drop filler/grammar. Min tokens (global AGENTS + replies).
 
-## Screenshots (“use a screenshot”)
-- Pick newest PNG in `~/Pictures`.
-- Verify it’s the right UI (ignore filename).
-- Size: `sips -g pixelWidth -g pixelHeight <file>` (prefer 2×).
-- Optimize: `imageoptim <file>` (install: `brew install imageoptim-cli`).
-- Replace asset; keep dimensions; commit; run gate; verify CI.
+## Code Quality Standards
+
+- **Never compromise type safety**: No `any`, no non-null assertion operator (`!`), no type assertions (`as Type`)
+- **Make illegal states unrepresentable**: Model domain with ADTs/discriminated unions; parse inputs at boundaries into typed structures; if state can't exist, code can't mishandle it
+- **Abstractions**: Consciously constrained, pragmatically parameterised, doggedly documented
+
+### **ENTROPY REMINDER**
+This codebase will outlive you. Every shortcut you take becomes
+someone else's burden. Every hack compounds into technical debt
+that slows the whole team down.
+
+You are not just writing code. You are shaping the future of this
+project. The patterns you establish will be copied. The corners
+you cut will be cut again.
+
+**Fight entropy. Leave the codebase better than you found it.**
 
 ## Docs
 - Start: run docs list (`docs:list` script, or `bin/docs-list` here if present; ignore if not installed); open docs before coding.
 - Follow links until domain makes sense; honor `Read when` hints.
 - Keep notes short; update docs when behavior/API changes (no ship w/o docs).
 - Add `read_when` hints on cross-cutting docs.
-- Model preference: latest only. OK: Anthropic Opus 4.5 / Sonnet 4.5 (Sonnet 3.5 = old; avoid), OpenAI GPT-5.2, xAI Grok-4.1 Fast, Google Gemini 3 Flash.
-
-## PR Feedback
-- Active PR: `gh pr view --json number,title,url --jq '"PR #\\(.number): \\(.title)\\n\\(.url)"'`.
-- PR comments: `gh pr view …` + `gh api …/comments --paginate`.
-- Replies: cite fix + file/line; resolve threads only after fix lands.
-
-## Flow & Runtime
-- Use repo’s package manager/runtime; no swaps w/o approval.
-- Use Codex background for long jobs; tmux only for interactive/persistent (debugger/server).
-
-## Build / Test
-- Before handoff: run full gate (lint/typecheck/tests/docs).
-- CI red: `gh run list/view`, rerun, fix, push, repeat til green.
-- Keep it observable (logs, panes, tails, MCP/browser tools).
-
-## Git
-- Safe by default: `git status/diff/log`. Push only when user asks.
-- `git checkout` ok for PR review / explicit request.
-- Branch changes require user consent.
-- Destructive ops forbidden unless explicit (`reset --hard`, `clean`, `restore`, `rm`, …).
-- Remotes under `~/code`: prefer SSH
-- Don’t delete/rename unexpected stuff; stop + ask.
-- No repo-wide S/R scripts; keep edits small/reviewable.
-- Avoid manual `git stash`; if Git auto-stashes during pull/rebase, that’s fine (hint, not hard guardrail).
-- If user types a command (“pull and push”), that’s consent for that command.
-- No amend unless asked.
-- Big review: `git --no-pager diff --color=never`.
-- Multi-agent: check `git status/diff` before edits; ship small commits.
-
-## Language/Stack Notes
-- TypeScript: use repo PM; run `docs:list`; keep files small; follow existing patterns.
-
-## Critical Thinking
-- Fix root cause (not band-aid).
-- Unsure: read more code; if still stuck, ask w/ short options.
-- Conflicts: call out; pick safer path.
-- Unrecognized changes: assume other agent; keep going; focus your changes. If it causes issues, stop + ask user.
-- Leave breadcrumb notes in thread.
-
-# Tools
 
 ### gh
 - GitHub CLI for PRs/CI/releases. Given issue/PR URL (or `/pull/5`): use `gh`, not web search.
 - Examples: `gh issue view <url> --comments -R owner/repo`, `gh pr view <url> --comments --files -R owner/repo`.
-
-### Slash Commands
-- Global: `~/.codex/prompts/`.
