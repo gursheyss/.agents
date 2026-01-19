@@ -1,0 +1,3 @@
+# Ignore VCS/venv inside codex skills
+/dot_codex/skills/**/.git/**
+/dot_codex/skills/**/.venv/**
