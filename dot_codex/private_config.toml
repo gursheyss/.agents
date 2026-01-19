@@ -30,6 +30,7 @@ url = "https://apigcp.trynia.ai/mcp"
 startup_timeout_sec = 30
 tool_timeout_sec = 360
 bearer_token_env_var = "NIA_TOKEN"
+enabled = false
 
 [otel]
 environment = "prod"
