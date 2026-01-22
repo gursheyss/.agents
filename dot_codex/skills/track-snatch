@@ -1,0 +1,61 @@
+---
+name: track-snatch
+description: Download and save music tracks from YouTube, SoundCloud, and other platforms with proper metadata, album art, and clean filenames. Use when user wants to save/download a song, track, or audio from a URL to their music folder.
+metadata: {"clawdbot":{"emoji":":musical_note:","requires":{"bins":["yt-dlp","ffmpeg"]}}}
+---
+
+# TrackSnatch
+
+Download audio from YouTube, SoundCloud, etc. with clean metadata and embedded artwork.
+
+## Default Output
+
+`~/Music/<artist> - <title>.mp3`
+
+## Core Command
+
+```bash
+yt-dlp --extract-audio --audio-format mp3 --audio-quality 0 \
+  --embed-thumbnail --add-metadata \
+  -o "~/Music/%(title)s.%(ext)s" "<URL>"
+```
+
+## Post-Processing (metadata cleanup)
+
+After download, use ffmpeg to fix artist/title:
+
+```bash
+ffmpeg -i "input.mp3" -c copy \
+  -metadata title="<clean_title>" \
+  -metadata artist="<artist_name>" \
+  "output.mp3"
+```
+
+Then remove the original and rename.
+
+## Metadata Extraction Guidelines
+
+### SoundCloud
+- Title often contains: `artist - title` or `title (prod. producer)`
+- Extract artist from uploader if not in title
+- Strip "p. producer", "prod. X", "ft. Y" into separate fields if needed
+
+### YouTube
+- Title format varies: `Artist - Song`, `Song | Artist`, `Song (Official Video)`
+- Use channel name as fallback artist
+- Strip suffixes: `(Official Video)`, `(Lyrics)`, `[HD]`, `(Audio)`
+
+## Workflow
+
+1. Download with yt-dlp (mp3, max quality, thumbnail, metadata)
+2. Inspect output filename/metadata
+3. If cleanup needed, use ffmpeg to set proper artist/title
+4. Confirm final filename follows `Artist - Title.mp3` format
+5. Report saved location to user
+
+## User Preferences
+
+- Always embed album art/thumbnail
+- Clean filenames: `Artist - Title.mp3`
+- Remove platform cruft from titles (Official Video, Lyrics, etc.)
+- Ask user for artist/title if ambiguous
